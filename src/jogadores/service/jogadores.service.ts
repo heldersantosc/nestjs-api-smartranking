@@ -1,8 +1,8 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CriarJogadorDto } from './dtos/criar-jogador.dto';
-import { IJogador } from './interfaces/jogador.interface';
+import { CriarJogadorDto } from '../dtos/criar-jogador.dto';
+import { IJogador } from '../interfaces/jogador.interface';
 
 @Injectable()
 export class JogadoresService {
