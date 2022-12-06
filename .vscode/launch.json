@@ -18,11 +18,11 @@
       "request": "launch",
       "name": "Debug Nest Framework",
       "args": ["${workspaceFolder}/src/main.ts"],
-      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
+      "runtimeArgs": ["-r", "ts-node/register"],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
-      "protocol": "inspector",
-      "console": "integratedTerminal"
+      "console": "integratedTerminal",
+      "restart": true
     }
   ]
 }
