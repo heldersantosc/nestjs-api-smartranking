@@ -1,12 +1,12 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { v4 as uuidv4 } from 'uuid';
 import { CriarJogadorDto } from './dtos/criar-jogador.dto';
-import { Jogador } from './interfaces/jogador.interface';
+import { IJogador } from './interfaces/jogador.interface';
 
 @Injectable()
 export class JogadoresService {
   private readonly logger = new Logger(JogadoresService.name);
-  private jogadores: Jogador[] = [];
+  private jogadores: IJogador[] = [];
 
   async criarAtualizarJogador(criarJogadorDto: CriarJogadorDto): Promise<void> {
     this.logger.log(`criaJogadorDto: ${JSON.stringify(criarJogadorDto)}`);
@@ -22,11 +22,11 @@ export class JogadoresService {
     }
   }
 
-  async consultarTodosJogadores(): Promise<Jogador[]> {
+  async consultarTodosJogadores(): Promise<IJogador[]> {
     return this.jogadores;
   }
 
-  async consultarJogadoresPeloEmail(email: string): Promise<Jogador> {
+  async consultarJogadoresPeloEmail(email: string): Promise<IJogador> {
     const jogadorEncontrado = this.jogadores.find((jogador) => jogador.email === email);
     if (jogadorEncontrado) return jogadorEncontrado;
 
@@ -39,7 +39,7 @@ export class JogadoresService {
 
   private criar(criaJogadorDto: CriarJogadorDto): void {
     const { nome, email, telefoneCelular } = criaJogadorDto;
-    const jogador: Jogador = {
+    const jogador: IJogador = {
       _id: uuidv4(),
       nome,
       telefoneCelular,
@@ -53,7 +53,7 @@ export class JogadoresService {
     this.jogadores.push(jogador);
   }
 
-  private atualizar(jogadorEncontrado: Jogador, criarJogadorDto: CriarJogadorDto): void {
+  private atualizar(jogadorEncontrado: IJogador, criarJogadorDto: CriarJogadorDto): void {
     const { nome } = criarJogadorDto;
     jogadorEncontrado.nome = nome;
   }
