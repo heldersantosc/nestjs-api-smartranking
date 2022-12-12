@@ -1,6 +1,7 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { AtualizarJogadorDto } from '../dtos/atualizar-jogador.dto';
 import { CriarJogadorDto } from '../dtos/criar-jogador.dto';
 import { IJogador } from '../interfaces/jogador.interface';
 
@@ -13,24 +14,30 @@ export class JogadoresService {
     return await this.jogadorModel.find().exec();
   }
 
-  async consultarJogadorPorEmail(email: string): Promise<IJogador> {
-    const jogadorEncontrado = await this.jogadorModel.findOne({ email }).exec();
+  async consultarJogadorPorId(id: string): Promise<IJogador> {
+    const jogadorEncontrado = await this.jogadorModel.findOne({ id }).exec();
     if (jogadorEncontrado) return jogadorEncontrado;
-    throw new NotFoundException(`Jogador com email: ${email} não encontrado!`);
+    throw new NotFoundException(`Jogador com id: ${id} não encontrado!`);
   }
 
-  async deletarJogadorPeloEmail(email: string): Promise<void> {
-    return await this.jogadorModel.remove({ email }).exec();
+  async deletarJogadorPeloId(id: string): Promise<any> {
+    return await this.jogadorModel.deleteOne({ id }).exec();
   }
 
   async criar(criaJogadorDto: CriarJogadorDto): Promise<IJogador> {
-    this.logger.log(`criar: ${criaJogadorDto.email}`);
-    const jogadorCriado = new this.jogadorModel(criaJogadorDto);
-    return await jogadorCriado.save();
+    try {
+      const jogadorCriado = new this.jogadorModel(criaJogadorDto);
+      return await jogadorCriado.save();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
   }
 
-  async atualizar(criaJogadorDto: CriarJogadorDto): Promise<IJogador> {
-    this.logger.log(`atualizar: ${criaJogadorDto.email}`);
-    return await this.jogadorModel.findOneAndUpdate({ email: criaJogadorDto.email }, { $set: criaJogadorDto }).exec();
+  async atualizar(id: string, atualizarJogadorDto: AtualizarJogadorDto): Promise<IJogador> {
+    try {
+      return await this.jogadorModel.findOneAndUpdate({ _id: id }, { $set: atualizarJogadorDto }, { new: true }).exec();
+    } catch (error) {
+      throw new NotFoundException('Jogador não encontrado');
+    }
   }
 }

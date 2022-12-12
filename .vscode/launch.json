@@ -5,6 +5,15 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch via NPM",
+      "request": "launch",
+      "runtimeArgs": ["run", "start:dev"],
+      "runtimeExecutable": "npm",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node",
+      "console": "integratedTerminal"
+    },
+    {
       "type": "node",
       "request": "launch",
       "name": "Launch Program",
@@ -18,7 +27,7 @@
       "request": "launch",
       "name": "Debug Nest Framework",
       "args": ["${workspaceFolder}/src/main.ts"],
-      "runtimeArgs": ["-r", "ts-node/register"],
+      "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
       "sourceMaps": true,
       "cwd": "${workspaceRoot}",
       "console": "integratedTerminal",
